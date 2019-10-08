@@ -1,7 +1,7 @@
 #build off of w4sp base image
 FROM w4sp/labs:base
 
-ADD elasticsearch-2.4.6.deb /tmp/elasticsearch-2.4.6.deb
+COPY elasticsearch-2.4.6.deb /tmp/elasticsearch-2.4.6.deb
 RUN cd /tmp && dpkg -i elasticsearch-2.4.6.deb
 
 #RUN wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
@@ -21,10 +21,9 @@ RUN apt-get update && apt-get -y install default-jre-headless
 #    rm -f kibana-${KIBANA_VERSION}-linux-x64.tar.gz && \
 #    mv /tmp/kibana-${KIBANA_VERSION}-linux-x64 /kibana
 
-ADD kibana-4.4.1-linux-x64.tar.gz /tmp/kibana-4.4.1-linux-x64.tar.gz
-RUN cd /tmp && \
-    tar zxf kibana-4.4.1-linux-x64.tar.gz && \
-	mv kibana-4.4.1-linux-x64 /kibana
+COPY kibana-4.4.1-linux-x64.tar.gz /tmp/kibana-4.4.1-linux-x64.tar.gz
+
+RUN cd /tmp && tar zxf kibana-4.4.1-linux-x64.tar.gz && mv kibana-4.4.1-linux-x64 /kibana
 
 RUN echo 'network.host: 0.0.0.0' >> /etc/elasticsearch/elasticsearch.yml
 
