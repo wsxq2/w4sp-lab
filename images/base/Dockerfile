@@ -36,7 +36,7 @@ ADD supervisor.conf /etc/supervisor.conf
 #add conf for dhclient
 ADD supervisor_dhclient.conf /etc/supervisor/conf.d/supervisor_dhclient.conf
 
-#RUN echo 'Acquire::http::Proxy::packages.elastic.co "http://192.168.56.100:1081";' > /etc/apt/apt.conf.d/01proxy
+RUN echo -e 'Acquire::http::Proxy::packages.elastic.co "http://192.168.56.100:1081";\nAcquire::http::Proxy::ppa.launchpad.net "http://192.168.56.100:1081";' > /etc/apt/apt.conf.d/01proxy
 
 # default command
 CMD ["supervisord", "-c", "/etc/supervisor.conf"]

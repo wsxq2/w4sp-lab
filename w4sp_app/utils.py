@@ -5,6 +5,7 @@ import ctypes
 import fcntl
 import struct
 import os
+import time
 
 
 def check_dumpcap():
@@ -92,14 +93,19 @@ def docker_build(image_path):
     curdir = os.getcwd()
 
     #first we need to build the base image so we can build the rest
+    
+    start_time=time.time()
     r('docker build -t w4sp/labs:base base')
+    print("cost %d s" % (time.time()-start_time))
 
     for image in os.walk( os.path.join(curdir,'.')).next()[1]:
 
         #no point in rebuilding the base image
         if image != 'base':
             image_name = 'w4sp/labs:' + image
+            start_time=time.time()
             r('docker build -t $image_name $image')
+            print("cost %d s" % (time.time()-start_time))
 
     #go back to the working dir
     os.chdir(orig_dir)

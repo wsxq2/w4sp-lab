@@ -410,6 +410,7 @@ def shutdown():
 # start the server with the 'run()' method
 if __name__ == '__main__':
 
+    start_time=time.time()
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
     cwd = os.getcwd()
@@ -528,3 +529,5 @@ if __name__ == '__main__':
     print('[*] Lab Launched, Starting Browser')
     print('[*] Do not close this terminal. Closing Terminal will terminate lab.')
     subprocess.call(['su', '-', 'w4sp-lab', '-c', 'firefox 127.0.0.1:5000'])
+
+    print("cost %s s" % (time.time()-start_time))
