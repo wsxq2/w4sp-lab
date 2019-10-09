@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # coding=utf8
 
+# change from https://github.com/silenceshell/docker_mirror
+
 from __future__ import print_function
 from __future__ import unicode_literals
 import platform
@@ -18,7 +20,7 @@ mirrors = {
     "tencent": "https://mirror.ccs.tencentyun.com",
     "netease": "http://hub-mirror.c.163.com",
     "ustc": "https://docker.mirrors.ustc.edu.cn",
-    "aliyun": "https://2h3po24q.mirror.aliyuncs.com"  # use your own aliyun mirror url instead.
+    #"aliyun": "https://2h3po24q.mirror.aliyuncs.com"  # use your own aliyun mirror url instead.
 }
 
 docker_config_map = {
