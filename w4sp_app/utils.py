@@ -144,7 +144,10 @@ def docker_clean():
                 pass
 
     r('service network-manager start')
-    r('service networking restart')
+    try:
+        r('service networking restart')
+    except:
+        pass
     r('service docker restart')
 
 

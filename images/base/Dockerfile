@@ -8,6 +8,8 @@ LABEL w4sp=true
 
 ENV DEBIAN_FRONTEND noninteractive
 
+ADD source.list /etc/apt/sources.list
+
 #things that are nice to have on all images
 RUN apt-get -y update && apt-get -y upgrade
 #RUN apt-get -y install wireshark tshark 
@@ -33,6 +35,8 @@ RUN  mkdir -p /var/log/supervisor && mkdir -p /etc/supervisor/conf.d
 ADD supervisor.conf /etc/supervisor.conf
 #add conf for dhclient
 ADD supervisor_dhclient.conf /etc/supervisor/conf.d/supervisor_dhclient.conf
+
+#RUN echo 'Acquire::http::Proxy::packages.elastic.co "http://192.168.56.100:1081";' > /etc/apt/apt.conf.d/01proxy
 
 # default command
 CMD ["supervisord", "-c", "/etc/supervisor.conf"]
