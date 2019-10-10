@@ -88,7 +88,12 @@ function check_config(){
 function apply_config(){
 	find . -type f -name Dockerfile |xargs grep -l PIP_INDEX_URL | xargs sed -i -e "/PIP_INDEX_URL/s##$PIP_INDEX_URL#g"
 
+	# PROXY
 	find . -type f -name Dockerfile |xargs grep -l PROXY | xargs sed -i -e "/PROXY/s##$PROXY#g"
+	echo "Acquire::http::Proxy::packages.elastic.co \"$PROXY\";
+Acquire::http::Proxy::ppa.launchpad.net \"$PROXY\";
+Acquire::http::Proxy::apt.dockerproject.org \"$PROXY\";
+" > /etc/apt/apt.conf.d/01proxy
 
 	[[ ! -d /etc/docker/ ]] && mkdir /etc/docker/
 	echo "{
