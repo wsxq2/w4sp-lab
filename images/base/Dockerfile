@@ -9,6 +9,7 @@ LABEL w4sp=true
 ENV DEBIAN_FRONTEND noninteractive
 
 ADD source.list /etc/apt/sources.list
+#ADD pip.conf /etc/pip.conf
 
 #things that are nice to have on all images
 RUN apt-get -y update && apt-get -y upgrade
@@ -26,7 +27,7 @@ RUN useradd -d /home/w4sp -m -p '$6$teB23uhk$u00/htDYpQKbBCVC2GsbcEi1m1BplEOnCs0
 RUN update-locale
 
 #install python dependencies
-RUN pip install netifaces
+RUN pip install netifaces -i PIP_INDEX_URL
 
 #create directory for child images to store configuration in
 RUN mkdir -p /var/log/supervisor && mkdir -p /etc/supervisor/conf.d
@@ -36,7 +37,7 @@ ADD supervisor.conf /etc/supervisor.conf
 #add conf for dhclient
 ADD supervisor_dhclient.conf /etc/supervisor/conf.d/supervisor_dhclient.conf
 
-RUN echo 'Acquire::http::Proxy::packages.elastic.co "http://192.168.56.100:1081";\nAcquire::http::Proxy::ppa.launchpad.net "http://192.168.56.100:1081";' > /etc/apt/apt.conf.d/01proxy
+RUN echo 'Acquire::http::Proxy::packages.elastic.co "PROXY";\nAcquire::http::Proxy::ppa.launchpad.net "PROXY";' > /etc/apt/apt.conf.d/01proxy
 
 # default command
 CMD ["supervisord", "-c", "/etc/supervisor.conf"]

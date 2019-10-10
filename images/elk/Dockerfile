@@ -14,7 +14,7 @@ RUN apt-get update && apt-get -y install default-jre-headless
 #ENV KIBANA_VERSION 4.4.1 
 #
 #RUN cd /tmp && \
-#	export https_proxy=http://192.168.56.100:1081 && \
+#	export https_proxy=PROXY && \
 #    wget -nv https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz && \
 #	unset https_proxy && \
 #    tar zxf kibana-${KIBANA_VERSION}-linux-x64.tar.gz && \
