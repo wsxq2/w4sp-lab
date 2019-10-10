@@ -8,7 +8,7 @@ LABEL w4sp=true
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ADD source.list /etc/apt/sources.list
+ADD sources.list /etc/apt/sources.list
 #ADD pip.conf /etc/pip.conf
 
 #things that are nice to have on all images

@@ -1,0 +1,14 @@
++ declare -i USER_ERROR=1 LOGNAME_ERROR=2 CONFIG_ERROR=3
++ CHECK_UBUNTU_SOURCES_LIST_URL=(["xidian"]="http://linux.xidian.edu.cn/mirrors/ubuntu/" ["tuna"]="http://mirrors.tuna.tsinghua.edu.cn/ubuntu/" ["aliyun"]="http://mirrors.aliyun.com/ubuntu/")
++ declare -A CHECK_UBUNTU_SOURCES_LIST_URL
++ source config.sh
+++ PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple/
+++ DOCKER_REGISTRY_MIRROR=http://dockerhub.azk8s.cn
+++ PROXY=socks5h://192.168.56.100:1082
+++ UBUNTU_SOURCES_LIST=tuna
++ test_
++ check_config
++ curl -4 -Is -m5 https://pypi.tuna.tsinghua.edu.cn/simple/
++ curl -4 -Is -m5 http://dockerhub.azk8s.cn
++ curl -4 -Is -m5 -x socks5h://192.168.56.100:1082 http://packages.elastic.co/
++ curl -4 -Is -m5 http://mirrors.tuna.tsinghua.edu.cn/ubuntu/
