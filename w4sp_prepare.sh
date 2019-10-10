@@ -11,12 +11,14 @@ IFS=$'\n\t'
 #trap 'exec 2>&4 1>&3' 0 1 2 3 RETURN
 #exec 1>log.out 2>&1
 
-set -x
+# if need debuging, uncomment the following line
+#set -x
 
-declare -i USER_ERROR LOGNAME_ERROR CONFIG_ERROR
+declare -i USER_ERROR LOGNAME_ERROR CONFIG_ERROR ARGUMENTS_ERROR
 USER_ERROR=1
 LOGNAME_ERROR=2
 CONFIG_ERROR=3
+ARGUMENTS_ERROR=4
 
 declare -A CHECK_UBUNTU_SOURCES_LIST_URL=(["xidian"]="http://linux.xidian.edu.cn/mirrors/ubuntu/" ["tuna"]="http://mirrors.tuna.tsinghua.edu.cn/ubuntu/" ["aliyun"]="http://mirrors.aliyun.com/ubuntu/")
 
@@ -30,12 +32,15 @@ function check_user() {
 	login_name=$(logname)
 	if [ $login_name = 'root' ] || [ $login_name != 'w4sp-lab' ]
 	then
-		id w4sp-lab || (echo 'so create user w4sp-lab' && useradd -mU -s /bin/bash -G sudo,wireshark -p '$6$teB23uhk$mUIdkn2Gby0viZxfexKSXTnc6leh1qGdtljSVSQkAKk3kzpTmcVYk/.h6TWJxFm2GtQZ1Wa3rHDlIZgrjT9nX.' w4sp-lab)
+		try_create_user_w4splab
 		echo "Please login with w4sp-lab and run this script again(sudo bash $0)"
 		exit $LOGNAME_ERROR
 	fi
 }
 
+function try_create_user_w4splab(){
+	id w4sp-lab || (echo 'create user w4sp-lab' && useradd -mU -s /bin/bash -G sudo,wireshark -p '$6$teB23uhk$mUIdkn2Gby0viZxfexKSXTnc6leh1qGdtljSVSQkAKk3kzpTmcVYk/.h6TWJxFm2GtQZ1Wa3rHDlIZgrjT9nX.' w4sp-lab)
+}
 
 function config_apt(){
 	wget -O /etc/apt/sources.list https://raw.githubusercontent.com/wsxq2/MyProfile/master/Linux/Kali/etc/apt/sources.list
@@ -72,6 +77,7 @@ function prepare_guest_addition(){
 }
 
 function check_config(){
+	echo "start check config.sh..."
 	# PIP_INDEX_URL
 	curl -4 -Is -m5 "$PIP_INDEX_URL" > /dev/null || (echo "ERROR_CONFIG: PIP_INDEX_URL($PIP_INDEX_URL)" && exit $CONFIG_ERROR)
 	
@@ -83,9 +89,12 @@ function check_config(){
 	
 	# UBUNTU_SOURCES_LIST
 	curl -4 -Is -m5 ${CHECK_UBUNTU_SOURCES_LIST_URL["$UBUNTU_SOURCES_LIST"]} > /dev/null || (echo "ERROR_CONFIG: UBUNTU_SOURCES_LIST($UBUNTU_SOURCES_LIST)" && exit $CONFIG_ERROR)
+
+	echo "check config.sh finished!"
 }
 
 function apply_config(){
+	echo 'start apply config...'
 	find . -type f -name Dockerfile |xargs grep -l PIP_INDEX_URL | xargs sed -i -e "/PIP_INDEX_URL/s##$PIP_INDEX_URL#g"
 
 	# PROXY
@@ -103,15 +112,11 @@ Acquire::http::Proxy::apt.dockerproject.org \"$PROXY\";
 " > /etc/docker/daemon.json
 
 	cp -v images/base/sources.list.$UBUNTU_SOURCES_LIST images/base/sources.list
-#cd images/base/ && [[ -f source.list.xidian ]] && mv -f source.list.xidian source.list && cd -
+
+	echo 'apply config finished!'
 }
 
-function test_(){
-	source config.sh
-	check_config
-}
-
-function main(){
+function new(){
 	declare -i start_time phase1_time phase2_time end_time total_time
 	start_time=$(date +%s)
 	check_user
@@ -126,9 +131,7 @@ function main(){
 	install_ilike_tools
 	#prepare_guest_addition
 
-	source config.sh
-	check_config
-	apply_config
+	config
 
 	end_time=$(date +%s)
 	phase2_time=$(($end_time-$start_time))
@@ -136,8 +139,47 @@ function main(){
 	total_time=$(($phase1_time+$phase2_time))
 	echo "total cost $total_time s"
 
-	echo 'please run `sudo python w4sp_webapp.py`'
+	echo 'all preparation work has been done. please run `sudo python w4sp_webapp.py`'
 }
 
-main
+function config(){
+	echo 'config start'
+
+	source config.sh
+	check_config
+	apply_config
+
+	echo 'config finished'
+}
+
+function print_usage_and_exit(){
+	echo "Usage: bash $0 {new|config|create_user}"
+	exit $ARGUMENTS_ERROR
+}
+
+function test_(){
+	source config.sh
+	check_config
+}
+
+
+function main(){
+	[[ $# -ne 1 ]] && print_usage_and_exit
+	case "$1" in
+		new )
+			new
+			;;
+		config)
+			config
+			;;
+		create_user)
+			# check_user include create_user
+			check_user
+			;;
+		*)
+			print_usage_and_exit
+	esac
+}
+
+main "$@"
 #test_
