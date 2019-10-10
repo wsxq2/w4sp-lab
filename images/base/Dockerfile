@@ -29,14 +29,14 @@ RUN update-locale
 RUN pip install netifaces
 
 #create directory for child images to store configuration in
-RUN  mkdir -p /var/log/supervisor && mkdir -p /etc/supervisor/conf.d
+RUN mkdir -p /var/log/supervisor && mkdir -p /etc/supervisor/conf.d
 
 #supervisor base configuration
 ADD supervisor.conf /etc/supervisor.conf
 #add conf for dhclient
 ADD supervisor_dhclient.conf /etc/supervisor/conf.d/supervisor_dhclient.conf
 
-RUN echo -e 'Acquire::http::Proxy::packages.elastic.co "http://192.168.56.100:1081";\nAcquire::http::Proxy::ppa.launchpad.net "http://192.168.56.100:1081";' > /etc/apt/apt.conf.d/01proxy
+RUN echo 'Acquire::http::Proxy::packages.elastic.co "http://192.168.56.100:1081";\nAcquire::http::Proxy::ppa.launchpad.net "http://192.168.56.100:1081";' > /etc/apt/apt.conf.d/01proxy
 
 # default command
 CMD ["supervisord", "-c", "/etc/supervisor.conf"]
