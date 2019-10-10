@@ -3,7 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 
-wget -O /etc/apt/sources.list https:////raw.githubusercontent.com/wsxq2/MyProfile/6cbd52222946f691671cb080cc9e58b659221b38/Linux/Kali/etc/apt/sources.list
+wget -O /etc/apt/sources.list https://raw.githubusercontent.com/wsxq2/MyProfile/master/Linux/Kali/etc/apt/sources.list
 
 #echo '# for X11
 #grep -q " host$" /etc/hosts && export DISPLAY="host:0.0"
