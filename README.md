@@ -34,15 +34,15 @@
       
       如果用不了，可以使用`images/`目录下的脚本`docker_mirror.py`来查找对于你而言最快的镜像
 
-   1. `PROXY`(for ubuntu 14.04)：这是为 kali 本身和 docker 容器里的操作系统配置的。主要针对如下网址：
-   ```
-   packages.elastic.co
-   ppa.launchpad.net
-   apt.dockerproject.org
-   ```
-   以提高使用`apt`时的下载速度。这里必需设置正确的 HTTP 代理，否则后面将无法进行（对于能否设置为空尚未测试）。SOCKS 代理亲测不可行。如果需要的话可使用`prioxy`或`polipo`将 SOCKS 代理转换为 HTTP 代理
+   1. `PROXY`(for kali and ubuntu 14.04)：这是为 kali 本身和 docker 容器里的操作系统配置的。主要针对如下网址：
+      ```
+      packages.elastic.co
+      ppa.launchpad.net
+      apt.dockerproject.org
+      ```
+      提高使用`apt`时的下载速度。这里必需设置正确的 HTTP 代理，否则后面将无法进行（对于能否设置为空尚未测试）。SOCKS 代理亲测不可行。如果需要的话可使用`prioxy`或`polipo`将 SOCKS 代理转换为 HTTP 代理，具体步骤可参见[如何转换 SOCKS 代理为 HTTP 代理](https://wsxq2.55555.io/blog/2019/07/07/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/#%E8%BD%AC%E6%8D%A2-socks-%E4%BB%A3%E7%90%86%E4%B8%BA-http-%E4%BB%A3%E7%90%86)
 
-   **温馨提示**：如果你的 Kali Linux 在虚拟机中且主机已经实现了科学上网，那么你没必要再折腾，直接使用[通过已经可以科学上网的电脑实现科学上网](https://wsxq2.55555.io/blog/2019/07/07/科学上网#通过已经可以科学上网的电脑实现科学上网)这个方法即可。且宿主机（Windows 或 MacOS）上的本地代理通常是全能代理（既支持 socks 代理又支持 http 代理）
+      **温馨提示**：如果你的 Kali Linux 在虚拟机中且宿主机已经实现了科学上网，那么你没必要再折腾，直接使用[通过已经可以科学上网的电脑实现科学上网](https://wsxq2.55555.io/blog/2019/07/07/科学上网#通过已经可以科学上网的电脑实现科学上网)这个方法即可。且由于宿主机（Windows 或 MacOS）上的本地代理通常是全能代理（既支持 socks 代理又支持 http 代理），你不需要将 SOCKS 代理转换为 HTTP 代理
    
    1. `UBUNTU_SOURCES_LIST`(for ubuntu 14.04): 这是为 docker 容器里的操作系统配置的。实质上是覆盖了`ubuntu 14.04`的`/etc/apt/sources.list`文件，以提高 docker 容器中使用 apt 时的下载速度。建议使用`aliyun`
 
@@ -57,9 +57,9 @@
    ```
 
 ### 如果想要不影响系统文件
-上述方法会影响 Kali 的`/etc/apt/sources.list`文件，它会从<https://raw.githubusercontent.com/wsxq2/MyProfile/master/Linux/Kali/etc/apt/sources.list>下载并覆盖`/etc/apt/sources.list，并自动添加 docker 源（<apt.dockerproject.org>）。而且会同步时间、安装一些我喜欢的工具（`tree`，`curl`，`info`，`ncat`，`nload`）
+上述方法会影响 Kali 的`/etc/apt/sources.list`文件，它会从<https://raw.githubusercontent.com/wsxq2/MyProfile/master/Linux/Kali/etc/apt/sources.list>下载并覆盖`/etc/apt/sources.list`，并自动添加 docker 源（<apt.dockerproject.org>）。而且会同步时间、安装一些我喜欢的工具（`tree`，`curl`，`info`，`ncat`，`nload`）
 
-如果你不喜欢这样，可以使用`w4sp_prepare.sh`脚本的`config`参数（而非`new`）。但是请确保安装了`curl`，因为`check_config`会用到它
+如果你不喜欢这样，可以使用`w4sp_prepare.sh`脚本的`config`参数直接应用配置文件`config.sh`（而非`new`）。但是请确保安装了`curl`，因为`check_config`会用到它
 
 假如你当前使用的用户名为`bob`，属于`sudo`组，且主机名为`kali`。则：
 1. 下载该项目：
