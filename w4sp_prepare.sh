@@ -39,7 +39,7 @@ function check_user() {
 }
 
 function try_create_user_w4splab(){
-	id w4sp-lab || (echo 'create user w4sp-lab' && useradd -mU -s /bin/bash -G sudo,wireshark -p '$6$teB23uhk$mUIdkn2Gby0viZxfexKSXTnc6leh1qGdtljSVSQkAKk3kzpTmcVYk/.h6TWJxFm2GtQZ1Wa3rHDlIZgrjT9nX.' w4sp-lab)
+	id w4sp-lab || (echo 'create user w4sp-lab' && useradd -mU -s /bin/bash -G sudo,wireshark -p '$6$teB23uhk$mUIdkn2Gby0viZxfexKSXTnc6leh1qGdtljSVSQkAKk3kzpTmcVYk/.h6TWJxFm2GtQZ1Wa3rHDlIZgrjT9nX.' w4sp-lab 2 >/dev/null || useradd -mU -s /bin/bash -G sudo -p '$6$teB23uhk$mUIdkn2Gby0viZxfexKSXTnc6leh1qGdtljSVSQkAKk3kzpTmcVYk/.h6TWJxFm2GtQZ1Wa3rHDlIZgrjT9nX.' w4sp-lab)
 }
 
 function config_apt(){
